@@ -1,14 +1,13 @@
 from flask import Flask, send_from_directory, jsonify, request, session
 from flask_cors import CORS
 import mysql.connector
+import os
 
 app = Flask(__name__, static_folder='../client')
 app.secret_key = "movers"
 CORS(app, supports_credentials=True, resources={r"/*": {"origins": "*"}})
 
-@app.route('/')
-def serve():
-    return send_from_directory(app.static_folder, 'index.html')
+
 
 # Connect to MySQL
 def connect_db():
@@ -21,9 +20,12 @@ def connect_db():
 
 # Route for the root URL
 @app.route('/')
-def home():
-    return "Movers Transport System API!"
-
+@app.route('/<path:path>')  # This route will catch all paths
+def serve(path=''):
+    if path != "" and os.path.exists(os.path.join(app.static_folder, path)):
+        return send_from_directory(app.static_folder, path)
+    else:
+        return send_from_directory(app.static_folder, 'index.html')
 # Users
 @app.route('/users', methods=['GET'])
 def get_users():
