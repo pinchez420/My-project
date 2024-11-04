@@ -2,7 +2,7 @@ from flask import Flask, send_from_directory, jsonify, request, session
 from flask_cors import CORS
 import mysql.connector
 
-app = Flask(__name__, static_folder='../client/build')
+app = Flask(__name__, static_folder='../client')
 app.secret_key = "movers"
 CORS(app, supports_credentials=True, resources={r"/*": {"origins": "*"}})
 
